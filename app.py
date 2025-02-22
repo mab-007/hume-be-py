@@ -1,14 +1,11 @@
 from flask import Flask
-from routes import setup_routes
+from routes.setup_routes import setup_routes
 import os
 from dotenv import load_dotenv
-from routes import register_socketio_handlers
-from flask_socketio import SocketIO
 from utils.session_manager import SessionManager
 import sys
 import signal
 from flask_cors import CORS
-from utils.event_manager import EventManager
 
 load_dotenv('./.env') #Load env from .env
 
@@ -49,6 +46,14 @@ setup_routes(app)
 
 
 
+def signal_handler(sig, frame):
+    print('\nShutting down gracefully...')
+    # Close MongoDB connection
+    # if db:
+    #     db.close()
+    print('Shutdown complete')
+    sys.exit(0)
+
 # Registering socket options
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGINT, signal_handler)
@@ -57,7 +62,7 @@ signal.signal(signal.SIGINT, signal_handler)
 if __name__ == '__main__':
     try:
         # init_app(app)
-        app.run(debug=True, host='0.0.0.0', port=5000)
+        app.run(debug=True, host='0.0.0.0', port=8080)
     except Exception as e:
         print(f"Error running app: {e}")
         # Ensure cleanup runs even if startup fails

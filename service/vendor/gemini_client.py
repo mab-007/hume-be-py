@@ -59,7 +59,7 @@ class GeminiClient:
             return None
         
 
-    def grounding_google(self, prompt):
+    def grounding_google(self, query):
         try:
             google_search_tool = Tool(
                 google_search = GoogleSearch()
@@ -69,7 +69,17 @@ class GeminiClient:
                 response_modalities=["TEXT"],
             )
 
-            response = self.gemini_client.models.generate_content(model=self.model, contents=prompt)
+            response = self.gemini_client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=query,
+                config=types.GenerateContentConfig(
+                    tools=[types.Tool(
+                        google_search=types.GoogleSearchRetrieval(
+                            dynamic_retrieval_config=types.DynamicRetrievalConfig(
+                                dynamic_threshold=0.6))
+                    )]
+                )
+            )
             text = response.text
             result_json = json.loads(response.json())
             sources = result_json['candidates'][0]['grounding_metadata']['grounding_chunks']

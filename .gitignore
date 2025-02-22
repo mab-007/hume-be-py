@@ -1,0 +1,5 @@
+.env
+/path
+# ignore all __pycache__ folders from any where
+/__pycache__
+**/__pycache__
