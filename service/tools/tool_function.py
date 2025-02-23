@@ -13,6 +13,8 @@ class ToolFunction:
             return await self.web_search(body)
         elif tool_name == "get_current_weather":
             return "37 F"
+        elif tool_name == "location_topics":
+            return await self.location_topics(body)
         else:
             return None
 
