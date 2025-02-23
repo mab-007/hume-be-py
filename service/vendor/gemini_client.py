@@ -59,7 +59,7 @@ class GeminiClient:
             return None
         
 
-    async def grounding_google(self, prompt):
+    async def grounding_google(self, prompt,model='gemini-2.0-flash', system_prompt=""):
         try:
             print(f"prompt: {prompt}")
             google_search_tool = Tool(
@@ -67,6 +67,7 @@ class GeminiClient:
             )
             config=GenerateContentConfig(
                 tools=[google_search_tool],
+                system_instruction=system_prompt,
                 response_modalities=["TEXT"],
             )
 
